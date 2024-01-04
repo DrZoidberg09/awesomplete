@@ -106,18 +106,18 @@ var _ = function (input, o) {
 				evt.preventDefault();
 			},
 			// The click event is fired even if the corresponding mousedown event has called preventDefault
-			"click": function(evt) {
+			"click touchstart": function(evt) {
 				var li = evt.target;
-
 				if (li !== this) {
 
 					while (li && !/li/i.test(li.nodeName)) {
 						li = li.parentNode;
 					}
 
+					evt.preventDefault();
+					me.select(li, evt.target, evt);
+					console.log("awesomeplate_drzoidberg")
 					if (li && evt.button === 0) {  // Only select on left click
-						evt.preventDefault();
-						me.select(li, evt.target, evt);
 					}
 				}
 			}
