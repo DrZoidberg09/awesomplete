@@ -5,6 +5,30 @@
  * MIT license
  */
 
+function getOS() {
+	const userAgent = window.navigator.userAgent,
+		platform = window.navigator?.userAgentData?.platform || window.navigator.platform,
+		macosPlatforms = ['macOS', 'Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+		windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+		iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+	let os = null;
+  
+	if (macosPlatforms.indexOf(platform) !== -1) {
+	  os = 'Mac OS';
+	} else if (iosPlatforms.indexOf(platform) !== -1) {
+	  os = 'iOS';
+	} else if (windowsPlatforms.indexOf(platform) !== -1) {
+	  os = 'Windows';
+	} else if (/Android/.test(userAgent)) {
+	  os = 'Android';
+	} else if (/Linux/.test(platform)) {
+	  os = 'Linux';
+	}
+  
+	return os;
+  }
+
+
 (function () {
 
 var _ = function (input, o) {
@@ -106,18 +130,19 @@ var _ = function (input, o) {
 				evt.preventDefault();
 			},
 			// The click event is fired even if the corresponding mousedown event has called preventDefault
-			"click touchstart": function(evt) {
+			"click touchend": function(evt) {
 				var li = evt.target;
 				if (li !== this) {
-
 					while (li && !/li/i.test(li.nodeName)) {
 						li = li.parentNode;
 					}
-
-					evt.preventDefault();
-					me.select(li, evt.target, evt);
-					console.log("awesomeplate_drzoidberg")
-					if (li && evt.button === 0) {  // Only select on left click
+					if (li && getOS() == "iOS"){
+						evt.preventDefault();
+						me.select(li, evt.target, evt);
+					}
+					else if (li && evt.button === 0) {  // Only select on left click
+						evt.preventDefault();
+						me.select(li, evt.target, evt);
 					}
 				}
 			}
